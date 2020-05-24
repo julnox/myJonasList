@@ -11,11 +11,16 @@ typedef struct TVShow
     char category [15];
 } TVShow;
 
+void listShows();
+void listAllShows();
+void addShow();
+void removeShow();
+
 int main()
 {
     int mainAction = 0;
 
-    while (mainAction != 8)
+    while (mainAction != 9)
     {
         do
         {
@@ -34,50 +39,48 @@ int main()
             printf ("                      jjjj                          sss  \n");
             printf ("\n");
             printf ("--------------------------------Name--------------------------------\n");
-            printf ("|Type (1) to list watched shows                                    |\n");
-            printf ("|Type (2) to list paused shows                                     |\n");
-            printf ("|Type (3) to list dropped shows                                    |\n");
-            printf ("|Type (4) to list planning to watch shows                          |\n");
-            printf ("|Type (5) to list all shows                                        |\n");
-            printf ("|Type (6) to add a show                                            |\n");
-            printf ("|Type (7) to remove a show                                         |\n");
-            printf ("|Type (8) to exit                                                  |\n");
+            printf ("|Type (1) to list watching shows                                   |\n");
+            printf ("|Type (2) to list completed shows                                  |\n");
+            printf ("|Type (3) to list paused shows                                     |\n");
+            printf ("|Type (4) to list dropped shows                                    |\n");
+            printf ("|Type (5) to list planning to watch shows                          |\n");
+            printf ("|Type (6) to list all shows                                        |\n");
+            printf ("|Type (7) to add a show                                            |\n");
+            printf ("|Type (8) to remove a show                                         |\n");
+            printf ("|Type (9) to exit                                                  |\n");
             printf ("--------------------------------Name--------------------------------\n");
             printf ("Type the number corresponding to the action: ");
             scanf ("%i", &mainAction);
         }
         while (mainAction < 1 || mainAction > 7);
 
-        if (mainAction == 1)
+        switch (mainAction)
         {
-
-        }
-        else if (mainAction == 2)
-        {
-
-        }
-        else if (mainAction == 3)
-        {
-
-        }
-        else if (mainAction == 4)
-        {
-
-        }
-        else if (mainAction == 5)
-        {
-
-        }
-        else if (mainAction == 6)
-        {
-
-        }
-        else if (mainAction == 7)
-        {
-
-        }
-        else
-        {
+        case 1:
+            listShows(1);
+            break;
+        case 2:
+            listShows(2);
+            break;
+        case 3:
+            listShows(3);
+            break;
+        case 4:
+            listShows(4);
+            break;
+        case 5:
+            listShows(5);
+            break;
+        case 6:
+            listAllShows();
+            break;
+        case 7:
+            addShow();
+            break;
+        case 8:
+            removeShow();
+            break;
+        default:
             exit(0);
         }
     }
@@ -88,29 +91,34 @@ void listShows (int operation)
 
     char fileLocation [30];
 
-    if (operation == 1)
+    switch (operation)
     {
-        fileLocation == "watchedshows.txt";
-    }
-    else if (operation == 2)
-    {
-        fileLocation == "pausedshows.txt"
-    }
-    else if (operation == 3)
-    {
-        fileLocation == "droppedshows.txt"
-    }
-    else
-    {
-        fileLocation == "planningshows.txt"
+    case 1:
+        strcpy(fileLocation, "watchingshows.txt");
+        break;
+    case 2:
+        strcpy(fileLocation, "completedshows.txt");
+        break;
+    case 3:
+        strcpy(fileLocation, "pausedshows.txt");
+        break;
+    case 4:
+        strcpy(fileLocation, "droppedshows.txt");
+        break;
+    case 5:
+        strcpy(fileLocation, "planningshows.txt");
+        break;
+    default:
+        return;
     }
 
     FILE *file = fopen (fileLocation, "r");
 
     if (file == NULL)
     {
+        printf("ERRO: Arquivo Inexistente");
         file = fopen (fileLocation, "w");
-        return 3;
+        return;
     }
 
     char list [10000];
@@ -122,51 +130,79 @@ void listShows (int operation)
     fclose(file);
 
 }
+void listAllShows ()
+{
+
+}
 
 void addShow ()
 {
+    unsigned int operation;
+    char fileLocation [30];
     TVShow show;
 
-    printf ("--------------------------------Name----------------------------------\n");
-    printf ("|Type (1) to add to watched shows                                    |\n");
-    printf ("|Type (2) to add to paused shows                                     |\n");
-    printf ("|Type (3) to add to dropped shows                                    |\n");
-    printf ("|Type (4) to add to planning to watch shows                          |\n");
-    printf ("--------------------------------Name----------------------------------\n");
+    do
+    {
+        system ("clear");
+        printf ("--------------------------------Name----------------------------------\n");
+        printf ("|Type (1) to add to watching shows                                   |\n");
+        printf ("|Type (2) to add to completed shows                                  |\n");
+        printf ("|Type (3) to add to paused shows                                     |\n");
+        printf ("|Type (4) to add to dropped shows                                    |\n");
+        printf ("|Type (5) to add to planning to watch shows                          |\n");
+        printf ("--------------------------------Name----------------------------------\n");
+        printf ("Type the number corresponding to the action: ");
+        scanf ("%i", &operation);
+    }
+    while (operation < 1 || operation > 4);
 
-    if (operation == 1)
+    switch (operation)
     {
-        fileLocation == "watchedshows.txt";
-    }
-    else if (operation == 2)
-    {
-        fileLocation == "pausedshows.txt"
-    }
-    else if (operation == 3)
-    {
-        fileLocation == "droppedshows.txt"
-    }
-    else
-    {
-        fileLocation == "planningshows.txt"
+    case 1:
+        strcpy(fileLocation, "watchingshows.txt");
+        break;
+    case 2:
+        strcpy(fileLocation, "completedshows.txt");
+        break;
+    case 3:
+        strcpy(fileLocation, "pausedshows.txt");
+        break;
+    case 4:
+        strcpy(fileLocation, "droppedshows.txt");
+        break;
+    case 5:
+        strcpy(fileLocation, "planningshows.txt");
+        break;
+    default:
+        return;
     }
 
-    show.id = ;
+    FILE *file = fopen (fileLocation, "a");
 
-    printf ("Type the title: \n")
-    scanf ("%[\n]s", show.title);
+    if (file == NULL)
+    {
+        printf("ERRO: Arquivo Inexistente");
+        file = fopen (fileLocation, "w");
+        return;
+    }
+
+    //show.id = (operationThatReadsFileAndReturnLastID);
+
+    printf ("Type the title: \n");
+    scanf ("%[^\n]s", &show.title);
 
     printf ("Type the synopsis: \n");
-    scanf ("%[\n]s", show.synopsis);
+    scanf ("%[^\n]s", &show.synopsis);
 
     printf ("Type the aired date: \n");
-    scanf ("%[\n]s", show.airedDate);
+    scanf ("%u", &show.airedDate);
 
     printf ("Type the category: \n");
-    printf ("%[\n]s", show.category);
+    scanf ("%[^\n]s", &show.category);
 
 }
-void listAllShows ()
+
+void removeShow ()
 {
 
 }
