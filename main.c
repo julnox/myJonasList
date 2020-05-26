@@ -25,20 +25,8 @@ int main()
         do
         {
             system("clear");
-            printf ("                                       dd         bb              \n");
-            printf ("              mm mm mmmm    aa aa      dd   eee   bb      yy   yy \n");
-            printf ("              mmm  mm  mm  aa aaa  dddddd ee   e  bbbbbb  yy   yy \n");
-            printf ("              mmm  mm  mm aa  aaa dd   dd eeeee   bb   bb  yyyyyy \n");
-            printf ("              mmm  mm  mm  aaa aa  dddddd  eeeee  bbbbbb       yy \n");
-            printf ("                                                           yyyyy  \n");
-            printf ("                        jjj                              \n");
-            printf ("                             oooo  nn nnn    aa aa  sss  \n");
-            printf ("                        jjj oo  oo nnn  nn  aa aaa s     \n");
-            printf ("                        jjj oo  oo nn   nn aa  aaa  sss  \n");
-            printf ("                        jjj  oooo  nn   nn  aaa aa     s \n");
-            printf ("                      jjjj                          sss  \n");
             printf ("\n");
-            printf ("--------------------------------Name--------------------------------\n");
+            printf ("--------------------------------MyJonasList--------------------------------\n");
             printf ("|Type (1) to list watching shows                                   |\n");
             printf ("|Type (2) to list completed shows                                  |\n");
             printf ("|Type (3) to list paused shows                                     |\n");
@@ -48,11 +36,11 @@ int main()
             printf ("|Type (7) to add a show                                            |\n");
             printf ("|Type (8) to remove a show                                         |\n");
             printf ("|Type (9) to exit                                                  |\n");
-            printf ("--------------------------------Name--------------------------------\n");
+            printf ("--------------------------------MyJonasList--------------------------------\n");
             printf ("Type the number corresponding to the action: ");
             scanf ("%i", &mainAction);
         }
-        while (mainAction < 1 || mainAction > 7);
+        while (mainAction < 1 || mainAction > 9);
 
         switch (mainAction)
         {
@@ -154,7 +142,7 @@ void addShow ()
         printf ("Type the number corresponding to the action: ");
         scanf ("%i", &operation);
     }
-    while (operation < 1 || operation > 4);
+    while (operation < 1 || operation > 5);
 
     switch (operation)
     {
