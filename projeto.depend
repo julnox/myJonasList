@@ -1,8 +1,0 @@
-# depslib dependency file v1.0
-1589746561 source:d:\users\julio\codeblocks-workspace\projeto\main.c
-	<stdio.h>
-	<stdlib.h>
-
-1589765510 source:d:\users\julio\codeblocks-workspace\projeto\bancodedados.c
-	<stdio.h>
-
