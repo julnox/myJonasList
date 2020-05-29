@@ -1,72 +1,83 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
-typedef struct TVShow
+void listarObras();
+void listarTodasAsObras();
+void adicionarObra();
+void removerObra();
+
+typedef struct TV
 {
     int id;
-    char title [50];
-    char synopsis [150];
-    unsigned int airedDate;
-    char category [15];
-} TVShow;
-
-void listShows();
-void listAllShows();
-void addShow();
-void removeShow();
+    char titulo [50];
+    char sinopse [150];
+    unsigned int dataDeLancamento;
+    char categoria [15];
+} TV;
 
 int main()
 {
-    int mainAction = 0;
+    setlocale(LC_ALL, "Portuguese");
 
-    while (mainAction != 9)
+    int acaoPrincipal = 0;
+
+    #ifdef _WIN32
+    char limparTela [4] = "cls";
+    #endif // _WIN32
+
+    #ifdef linux
+    char limparTela [6] = "clear";
+    #endif // linux
+
+    while (acaoPrincipal != 9)
     {
         do
         {
-            system("clear");
+            system (limparTela);
             printf ("\n");
             printf ("--------------------------------MyJonasList--------------------------------\n");
-            printf ("|Type (1) to list watching shows                                   |\n");
-            printf ("|Type (2) to list completed shows                                  |\n");
-            printf ("|Type (3) to list paused shows                                     |\n");
-            printf ("|Type (4) to list dropped shows                                    |\n");
-            printf ("|Type (5) to list planning to watch shows                          |\n");
-            printf ("|Type (6) to list all shows                                        |\n");
-            printf ("|Type (7) to add a show                                            |\n");
-            printf ("|Type (8) to remove a show                                         |\n");
-            printf ("|Type (9) to exit                                                  |\n");
+            printf ("|Digite (1) para listar obras em progresso                                |\n");
+            printf ("|Digite (2) para listar obras completados                                 |\n");
+            printf ("|Digite (3) para listar obras pausadas                                    |\n");
+            printf ("|Digite (4) para listar obras abandonadas                                 |\n");
+            printf ("|Digite (5) para listar obras que se planeja assistir                     |\n");
+            printf ("|Digite (6) para listar todas as obras                                    |\n");
+            printf ("|Digite (7) para adicionar uma obra                                       |\n");
+            printf ("|Digite (8) para remover uma obra                                         |\n");
+            printf ("|Digite (9) para sair                                                     |\n");
             printf ("--------------------------------MyJonasList--------------------------------\n");
-            printf ("Type the number corresponding to the action: ");
-            scanf ("%i", &mainAction);
+            printf ("Digite o número que corresponde à ação: ");
+            scanf ("%i", &acaoPrincipal);
         }
-        while (mainAction < 1 || mainAction > 9);
+        while (acaoPrincipal < 1 || acaoPrincipal > 9);
 
-        switch (mainAction)
+        switch (acaoPrincipal)
         {
         case 1:
-            listShows(1);
+            listarObras(limparTela, 1);
             break;
         case 2:
-            listShows(2);
+            listarObras(limparTela, 2);
             break;
         case 3:
-            listShows(3);
+            listarObras(limparTela, 3);
             break;
         case 4:
-            listShows(4);
+            listarObras(limparTela, 4);
             break;
         case 5:
-            listShows(5);
+            listarObras(limparTela, 5);
             break;
         case 6:
-            listAllShows();
+            listarTodasAsObras(limparTela);
             break;
         case 7:
-            addShow();
+            adicionarObra(limparTela);
             break;
         case 8:
-            removeShow();
+            removerObra(limparTela);
             break;
         default:
             exit(0);
@@ -74,123 +85,122 @@ int main()
     }
 }
 
-void listShows (int operation)
+void listarObras (char limparTela [], int operacao)
 {
 
-    char fileLocation [30];
+    char localDoArquivo [30];
 
-    switch (operation)
+    switch (operacao)
     {
     case 1:
-        strcpy(fileLocation, "watchingshows.txt");
+        strcpy(localDoArquivo, "./arquivos/obrasAssistidas.txt");
         break;
     case 2:
-        strcpy(fileLocation, "completedshows.txt");
+        strcpy(localDoArquivo, "./arquivos/obrasCompletadas.txt");
         break;
     case 3:
-        strcpy(fileLocation, "pausedshows.txt");
+        strcpy(localDoArquivo, "./arquivos/obrasPausadas.txt");
         break;
     case 4:
-        strcpy(fileLocation, "droppedshows.txt");
+        strcpy(localDoArquivo, "./arquivos/obrasAbandonadas.txt");
         break;
     case 5:
-        strcpy(fileLocation, "planningshows.txt");
+        strcpy(localDoArquivo, "./arquivos/obrasPlanejamento.txt");
         break;
     default:
         return;
     }
 
-    FILE *file = fopen (fileLocation, "r");
+    FILE *arquivo = fopen (localDoArquivo, "r");
 
-    if (file == NULL)
+    if (arquivo == NULL)
     {
         printf("ERRO: Arquivo Inexistente");
-        file = fopen (fileLocation, "w");
+        arquivo = fopen (localDoArquivo, "w");
         return;
     }
 
-    char list [10000];
+    char lista [10000];
 
-    while (fgets(list, 10000, file) != NULL)
+    while (fgets(lista, 10000, arquivo) != NULL)
     {
-        printf ("%s", list);
+        printf ("%s", lista);
     }
-    fclose(file);
+    fclose(arquivo);
 
 }
-void listAllShows ()
+void listarTodasAsObras (char limparTela [])
 {
 
 }
 
-void addShow ()
+void adicionarObra (char limparTela [])
 {
-    unsigned int operation;
-    char fileLocation [30];
-    TVShow show;
+    unsigned int operacao;
+    char localDoArquivo [30];
+    TV show;
 
     do
     {
-        system ("clear");
-        printf ("--------------------------------Name----------------------------------\n");
-        printf ("|Type (1) to add to watching shows                                   |\n");
-        printf ("|Type (2) to add to completed shows                                  |\n");
-        printf ("|Type (3) to add to paused shows                                     |\n");
-        printf ("|Type (4) to add to dropped shows                                    |\n");
-        printf ("|Type (5) to add to planning to watch shows                          |\n");
-        printf ("--------------------------------Name----------------------------------\n");
-        printf ("Type the number corresponding to the action: ");
-        scanf ("%i", &operation);
+        system (limparTela);
+        printf ("--------------------------------Adicionar----------------------------------\n");
+        printf ("|Digite (1) para adicionar à lista de obras assistidas                    |\n");
+        printf ("|Digite (2) para adicionar à lista de obras completadas                   |\n");
+        printf ("|Digite (3) para adicionar à lista de obras pausadas                      |\n");
+        printf ("|Digite (4) para adicionar à lista de obras abandonadas                   |\n");
+        printf ("|Digite (5) para adicionar à lista de obras em planejamento               |\n");
+        printf ("--------------------------------Adicionar----------------------------------\n");
+        printf ("Digite o número correspondente à ação: ");
+        scanf ("%i", &operacao);
     }
-    while (operation < 1 || operation > 5);
+    while (operacao < 1 || operacao > 5);
 
-    switch (operation)
+    switch (operacao)
     {
     case 1:
-        strcpy(fileLocation, "watchingshows.txt");
+        strcpy(localDoArquivo, "./arquivos/obrasAssistidas.txt");
         break;
     case 2:
-        strcpy(fileLocation, "completedshows.txt");
+        strcpy(localDoArquivo, "./arquivos/obrasCompletadas.txt");
         break;
     case 3:
-        strcpy(fileLocation, "pausedshows.txt");
+        strcpy(localDoArquivo, "./arquivos/obrasPausadas.txt");
         break;
     case 4:
-        strcpy(fileLocation, "droppedshows.txt");
+        strcpy(localDoArquivo, "./arquivos/obrasAbandonadas.txt");
         break;
     case 5:
-        strcpy(fileLocation, "planningshows.txt");
+        strcpy(localDoArquivo, "./arquivos/obrasPlanejamento.txt");
         break;
     default:
         return;
     }
 
-    FILE *file = fopen (fileLocation, "a");
+    FILE *arquivo = fopen (localDoArquivo, "a");
 
-    if (file == NULL)
+    if (arquivo == NULL)
     {
         printf("ERRO: Arquivo Inexistente");
-        file = fopen (fileLocation, "w");
+        arquivo = fopen (localDoArquivo, "w");
         return;
     }
 
     //show.id = (operationThatReadsFileAndReturnLastID);
 
     printf ("Type the title: \n");
-    scanf ("%[^\n]s", &show.title);
+    scanf ("%[^\n]s", &show.titulo);
 
     printf ("Type the synopsis: \n");
-    scanf ("%[^\n]s", &show.synopsis);
+    scanf ("%[^\n]s", &show.sinopse);
 
     printf ("Type the aired date: \n");
-    scanf ("%u", &show.airedDate);
+    scanf ("%u", &show.dataDeLancamento);
 
     printf ("Type the category: \n");
-    scanf ("%[^\n]s", &show.category);
-
+    scanf ("%[^\n]s", &show.categoria);
 }
 
-void removeShow ()
+void removerObra ()
 {
 
 }
