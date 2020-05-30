@@ -2,24 +2,27 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
+#include <unistd.h>
 
 void listarObras();
 void listarTodasAsObras();
 void adicionarObra();
 void removerObra();
+void checarLocal();
 
 typedef struct TV
 {
     char titulo [50];
     char sinopse [150];
-    unsigned int dataDeLancamento;
+    char dataDeLancamento [10];
     char categoria [15];
 } TV;
+
+FILE *arquivo;
 
 int main()
 {
     setlocale(LC_ALL, "Portuguese");
-
 
     #ifdef _WIN32
     char limparTela [4] = "cls";
@@ -31,29 +34,30 @@ int main()
 
     int acaoPrincipal;
 
+    checarLocal ();
+
     while (acaoPrincipal != 9)
     {
-        //do
-        //{
-            system (limparTela);
+        do
+        {
+            system ("clear");
             printf ("\n");
             printf ("--------------------------------MyJonasList--------------------------------\n");
-            printf ("|Digite (1) para listar obras em progresso                                |\n");
-            printf ("|Digite (2) para listar obras completados                                 |\n");
-            printf ("|Digite (3) para listar obras pausadas                                    |\n");
-            printf ("|Digite (4) para listar obras abandonadas                                 |\n");
-            printf ("|Digite (5) para listar obras que se planeja assistir                     |\n");
-            printf ("|Digite (6) para listar todas as obras                                    |\n");
-            printf ("|Digite (7) para adicionar uma obra                                       |\n");
-            printf ("|Digite (8) para remover uma obra                                         |\n");
-            printf ("|Digite (9) para sair                                                     |\n");
+            printf ("| Digite (1) para listar obras em progresso                               |\n");
+            printf ("| Digite (2) para listar obras completados                                |\n");
+            printf ("| Digite (3) para listar obras pausadas                                   |\n");
+            printf ("| Digite (4) para listar obras abandonadas                                |\n");
+            printf ("| Digite (5) para listar obras que se planeja assistir                    |\n");
+            printf ("| Digite (6) para listar todas as obras                                   |\n");
+            printf ("| Digite (7) para adicionar uma obra                                      |\n");
+            printf ("| Digite (8) para remover uma obra                                        |\n");
+            printf ("| Digite (9) para sair                                                    |\n");
             printf ("--------------------------------MyJonasList--------------------------------\n");
             printf ("Digite o número que corresponde à ação: ");
             scanf ("%i", &acaoPrincipal);
-            printf ("PAROU AQUI AAAAAAAA2 %i", acaoPrincipal);
 
-        //}
-        //while (acaoPrincipal < 1 || acaoPrincipal > 9);
+        }
+        while (acaoPrincipal < 1 || acaoPrincipal > 9);
 
         switch (acaoPrincipal)
         {
@@ -87,6 +91,26 @@ int main()
     }
 }
 
+void checarLocal ()
+{
+    FILE *arquivo;
+    char localDoArquivo [6][40] =
+    {
+    "./arquivos/obrasAssistidas.txt",
+    "./arquivos/obrasCompletadas.txt",
+    "./arquivos/obrasPausadas.txt",
+    "./arquivos/obrasAbandonadas.txt",
+    "./arquivos/obrasPlanejamento.txt",
+    "./arquivos/todasAsObras.txt"
+    };
+
+    for (int i = 0; i < 6; i++)
+    {
+        arquivo = fopen (localDoArquivo[i], "w+");
+        fclose(arquivo);
+    }
+}
+
 void listarObras (char limparTela [6], int operacao)
 {
     char localDoArquivo [50];
@@ -114,24 +138,26 @@ void listarObras (char limparTela [6], int operacao)
 
     FILE *arquivo;
 
-    if ((arquivo = fopen(localDoArquivo, "r")) == NULL)
-    {
-        printf("Arquivo Foi Criado");
-        arquivo = fopen (localDoArquivo, "w");
-        fclose(arquivo);
-    }
-
     arquivo = fopen (localDoArquivo, "r");
 
     while (fgets(lista, 1000, arquivo) != NULL)
     {
-        //fscanf(arquivo, nome);
+        printf("%s",lista);
     }
     fclose(arquivo);
 
 }
+
 void listarTodasAsObras (char limparTela [])
 {
+    FILE *arquivo = fopen ("./arquivos/todasAsObras.txt", "r");
+    char lista [3000];
+
+    while (fgets(lista, 1000, arquivo) != NULL)
+    {
+        printf("%s",lista);
+    }
+    fclose(arquivo);
 
 }
 
@@ -139,6 +165,11 @@ void adicionarObra (char limparTela [])
 {
     unsigned int operacao;
     char localDoArquivo [50];
+    char titulo [50];
+    char sinopse [150];
+    char dataDeLancamento [10];
+    char categoria [15];
+
     TV show;
 
     do
@@ -177,29 +208,25 @@ void adicionarObra (char limparTela [])
         return;
     }
 
-    FILE *arquivo;
+    FILE *arquivo = fopen (localDoArquivo, "a");
 
-    if ((arquivo = fopen(localDoArquivo, "r")) == NULL)
-    {
-        printf("Arquivo Foi Criado");
-        arquivo = fopen (localDoArquivo, "w");
-        fclose(arquivo);
-    }
-    arquivo = fopen (localDoArquivo, "a");
+    printf ("Digite o título: ");
+    scanf ("%[^\n]s", &titulo);
+    strcpy(show.titulo, titulo);
 
-    printf ("Type the title: \n");
-    scanf ("%[^\n]s", &show.titulo);
+    printf ("Digite a sinopse: ");
+    scanf ("%[^\n]s", &sinopse);
+    strcpy(show.sinopse, sinopse);
 
-    printf ("Type the synopsis: \n");
-    scanf ("%[^\n]s", &show.sinopse);
+    printf ("Digite a data de lançamento: ");
+    scanf ("%s", &dataDeLancamento);
+    strcpy(show.dataDeLancamento, dataDeLancamento);
 
-    printf ("Type the aired date: \n");
-    scanf ("%u", &show.dataDeLancamento);
+    printf ("Digite a categoria: ");
+    scanf ("%[^\n]s", &categoria);
+    strcpy(show.categoria, categoria);
 
-    printf ("Type the category: \n");
-    scanf ("%[^\n]s", &show.categoria);
-
-    fprintf (arquivo, "%s;%s;%u;%s", show.titulo, show.sinopse, show.dataDeLancamento, show.categoria);
+    fprintf (arquivo, "Título: %s\n Sinopse: %s\n Data de Lançamento: %s\n Categoria: %s\n", show.titulo, show.sinopse, show.dataDeLancamento, show.categoria);
     fclose(arquivo);
 }
 
