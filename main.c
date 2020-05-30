@@ -40,7 +40,7 @@ int main()
     {
         do
         {
-            system ("clear");
+            system (limparTela);
             printf ("\n");
             printf ("--------------------------------MyJonasList--------------------------------\n");
             printf ("| Digite (1) para listar obras em progresso                               |\n");
