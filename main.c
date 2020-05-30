@@ -10,7 +10,6 @@ void removerObra();
 
 typedef struct TV
 {
-    int id;
     char titulo [50];
     char sinopse [150];
     unsigned int dataDeLancamento;
@@ -21,7 +20,6 @@ int main()
 {
     setlocale(LC_ALL, "Portuguese");
 
-    int acaoPrincipal = 0;
 
     #ifdef _WIN32
     char limparTela [4] = "cls";
@@ -31,10 +29,12 @@ int main()
     char limparTela [6] = "clear";
     #endif // linux
 
+    int acaoPrincipal;
+
     while (acaoPrincipal != 9)
     {
-        do
-        {
+        //do
+        //{
             system (limparTela);
             printf ("\n");
             printf ("--------------------------------MyJonasList--------------------------------\n");
@@ -50,8 +50,10 @@ int main()
             printf ("--------------------------------MyJonasList--------------------------------\n");
             printf ("Digite o número que corresponde à ação: ");
             scanf ("%i", &acaoPrincipal);
-        }
-        while (acaoPrincipal < 1 || acaoPrincipal > 9);
+            printf ("PAROU AQUI AAAAAAAA2 %i", acaoPrincipal);
+
+        //}
+        //while (acaoPrincipal < 1 || acaoPrincipal > 9);
 
         switch (acaoPrincipal)
         {
@@ -85,11 +87,10 @@ int main()
     }
 }
 
-void listarObras (char limparTela [], int operacao)
+void listarObras (char limparTela [6], int operacao)
 {
-
-    char localDoArquivo [30];
-
+    char localDoArquivo [50];
+    char lista [1000];
     switch (operacao)
     {
     case 1:
@@ -111,20 +112,20 @@ void listarObras (char limparTela [], int operacao)
         return;
     }
 
-    FILE *arquivo = fopen (localDoArquivo, "r");
+    FILE *arquivo;
 
-    if (arquivo == NULL)
+    if ((arquivo = fopen(localDoArquivo, "r")) == NULL)
     {
-        printf("ERRO: Arquivo Inexistente");
+        printf("Arquivo Foi Criado");
         arquivo = fopen (localDoArquivo, "w");
-        return;
+        fclose(arquivo);
     }
 
-    char lista [10000];
+    arquivo = fopen (localDoArquivo, "r");
 
-    while (fgets(lista, 10000, arquivo) != NULL)
+    while (fgets(lista, 1000, arquivo) != NULL)
     {
-        printf ("%s", lista);
+        //fscanf(arquivo, nome);
     }
     fclose(arquivo);
 
@@ -137,7 +138,7 @@ void listarTodasAsObras (char limparTela [])
 void adicionarObra (char limparTela [])
 {
     unsigned int operacao;
-    char localDoArquivo [30];
+    char localDoArquivo [50];
     TV show;
 
     do
@@ -176,16 +177,15 @@ void adicionarObra (char limparTela [])
         return;
     }
 
-    FILE *arquivo = fopen (localDoArquivo, "a");
+    FILE *arquivo;
 
-    if (arquivo == NULL)
+    if ((arquivo = fopen(localDoArquivo, "r")) == NULL)
     {
-        printf("ERRO: Arquivo Inexistente");
+        printf("Arquivo Foi Criado");
         arquivo = fopen (localDoArquivo, "w");
-        return;
+        fclose(arquivo);
     }
-
-    //show.id = (operationThatReadsFileAndReturnLastID);
+    arquivo = fopen (localDoArquivo, "a");
 
     printf ("Type the title: \n");
     scanf ("%[^\n]s", &show.titulo);
@@ -198,6 +198,9 @@ void adicionarObra (char limparTela [])
 
     printf ("Type the category: \n");
     scanf ("%[^\n]s", &show.categoria);
+
+    fprintf (arquivo, "%s;%s;%u;%s", show.titulo, show.sinopse, show.dataDeLancamento, show.categoria);
+    fclose(arquivo);
 }
 
 void removerObra ()
