@@ -31,13 +31,16 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="myJonasList.h" />
-		<Unit filename="myJonasList.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="funcoes.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="menus.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="myJonasList.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="myJonasList.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

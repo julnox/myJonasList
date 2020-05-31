@@ -4,9 +4,31 @@
 #include <unistd.h>
 #include "myJonasList.h"
 
+FILE *arquivo;
+
+typedef struct TV
+{
+    char titulo [50];
+    char sinopse [150];
+    char dataDeLancamento [10];
+    char categoria [15];
+} TV;
+
+void limparTela ()
+{
+    #ifdef _WIN32
+    char comandoLimparTela [4] = "cls";
+    #endif // _WIN32
+
+    #ifdef linux
+    char comandoLimparTela [6] = "clear";
+    #endif // linux
+
+    system(comandoLimparTela);
+}
+
 void checarLocal ()
 {
-    FILE *arquivo;
     char localDoArquivo [6][40] =
     {
         "./arquivos/obrasEmProgresso.txt",
@@ -32,12 +54,11 @@ void checarLocal ()
     }
 }
 
-void listarObras (char limparTela [6], int operacao)
+void listarObras (int operacao)
 {
     char localDoArquivo [35];
     char lista [1000];
     char opcao [27];
-    FILE *arquivo;
 
     switch (operacao)
     {
@@ -67,7 +88,7 @@ void listarObras (char limparTela [6], int operacao)
 
     arquivo = fopen (localDoArquivo, "r");
 
-    system (limparTela);
+    limparTela();
     printf ("---------------------Lista de %s------------------------\n", opcao);
     while (fgets(lista, 1000, arquivo) != NULL)
     {
@@ -81,13 +102,12 @@ void listarObras (char limparTela [6], int operacao)
 
 }
 
-void listarTodasAsObras (char limparTela [6])
+void listarTodasAsObras ()
 {
     char lista [3000];
-    FILE *arquivo = fopen ("./arquivos/todasAsObras.txt", "r");
+    arquivo = fopen ("./arquivos/todasAsObras.txt", "r");
 
-    system (limparTela);
-
+    limparTela();
     printf ("---------------------Lista de Todas As Obras------------------------\n");
     while (fgets(lista, 1000, arquivo) != NULL)
     {
@@ -101,27 +121,13 @@ void listarTodasAsObras (char limparTela [6])
 
 }
 
-void adicionarObra (char limparTela [6])
+void adicionarObra ()
 {
     unsigned int operacao;
     char localDoArquivo [35];
-    FILE *arquivo;
     TV show;
 
-    do
-    {
-        system (limparTela);
-        printf ("--------------------------------Adicionar----------------------------------\n");
-        printf ("| Digite (1) para adicionar à lista de obras em progresso                 |\n");
-        printf ("| Digite (2) para adicionar à lista de obras completadas                  |\n");
-        printf ("| Digite (3) para adicionar à lista de obras pausadas                     |\n");
-        printf ("| Digite (4) para adicionar à lista de obras abandonadas                  |\n");
-        printf ("| Digite (5) para adicionar à lista de obras em planejamento              |\n");
-        printf ("--------------------------------Adicionar----------------------------------\n");
-        printf ("Digite o número correspondente à ação: ");
-        scanf ("%i", &operacao);
-    }
-    while (operacao < 1 || operacao > 5);
+    operacao = menuAdicionar();
 
     switch (operacao)
     {
@@ -173,12 +179,12 @@ void adicionarObra (char limparTela [6])
     getchar();
 }
 
-void removerObra (char limparTela [6])
+void removerObra ()
 {
 
 }
 
-void buscarObra (char limparTela [6])
+void buscarObra ()
 {
     char obra [1][20];
     char google[] = {"https://www.google.com/search?q="};
