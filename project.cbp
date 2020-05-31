@@ -31,7 +31,11 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="main.c">
+		<Unit filename="myJonasList.h" />
+		<Unit filename="myJonasList.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="funcoes.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>
