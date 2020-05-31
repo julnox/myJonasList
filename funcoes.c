@@ -2,17 +2,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include "myJonasList.h"
-
-FILE *arquivo;
+#include <regex.h>
+#include "myjonaslist.h"
 
 typedef struct TV
 {
     char titulo [50];
     char sinopse [150];
-    char dataDeLancamento [10];
+    char dataDeLancamento [12];
     char categoria [15];
 } TV;
+
+FILE *arquivo;
 
 void limparTela ()
 {
@@ -54,13 +55,13 @@ void checarLocal ()
     }
 }
 
-void listarObras (int operacao)
+void listarObras (int acaoListar)
 {
     char localDoArquivo [35];
     char lista [1000];
     char opcao [27];
 
-    switch (operacao)
+    switch (acaoListar)
     {
     case 1:
         strcpy(localDoArquivo, "./arquivos/obrasEmProgresso.txt");
@@ -123,13 +124,13 @@ void listarTodasAsObras ()
 
 void adicionarObra ()
 {
-    unsigned int operacao;
+    unsigned int acaoAdicionar;
     char localDoArquivo [35];
     TV show;
 
-    operacao = menuAdicionar();
+    acaoAdicionar = menuAdicionar();
 
-    switch (operacao)
+    switch (acaoAdicionar)
     {
     case 1:
         strcpy(localDoArquivo, "./arquivos/obrasEmProgresso.txt");
@@ -151,20 +152,22 @@ void adicionarObra ()
     }
 
     printf ("Digite o título: ");
-    scanf ("%[^\n]s", &show.titulo);
-    //strcpy(show.titulo, );
+    getchar();
+    fgets (show.titulo, 50, stdin);
 
     printf ("Digite a sinopse: ");
-    scanf ("%[^\n]s", &show.sinopse);
-    //strcpy(show.sinopse, scanf("%s"));
+    fgets (show.sinopse, 150, stdin);
 
     printf ("Digite a data de lançamento: ");
-    scanf ("%s", &show.dataDeLancamento);
-    //strcpy(show.dataDeLancamento, scanf("%s"));
+    fgets (show.dataDeLancamento, 12, stdin);
 
     printf ("Digite a categoria: ");
-    scanf ("%[^\n]s", &show.categoria);
-    //strcpy(show.categoria, scanf("%s"));
+    fgets (show.categoria, 15, stdin);
+
+    show.titulo[strcspn(show.titulo, "\n")] = '\0';
+    show.sinopse[strcspn(show.sinopse, "\n")] = '\0';
+    show.dataDeLancamento[strcspn(show.dataDeLancamento, "\n")] = '\0';
+    show.categoria[strcspn(show.categoria, "\n")] = '\0';
 
     arquivo = fopen (localDoArquivo, "a");
     fprintf (arquivo, "\n Título: %s\n Sinopse: %s\n Data de Lançamento: %s\n Categoria: %s\n", show.titulo, show.sinopse, show.dataDeLancamento, show.categoria);
@@ -175,36 +178,80 @@ void adicionarObra ()
     fclose(arquivo);
 
     printf ("Obra Adicionada com Sucesso!\n");
-    getchar();
-    getchar();
+    sleep (1);
 }
 
 void removerObra ()
 {
+    unsigned int acaoRemover;
 
+    acaoRemover = menuRemover();
+
+    switch (acaoRemover)
+    {
+
+    }
 }
 
-void buscarObra ()
+void pesquisarObra ()
 {
-    char obra [1][20];
-    char google[] = {"https://www.google.com/search?q="};
+    char titulo [50];
+    char google [80];
+    char opcao [15];
+    unsigned int acaoPesquisar;
 
-    //"https://www.google.com/search?q=term&btnI"
+    acaoPesquisar = menuPesquisar();
+
     #ifdef _WIN32
-    char comando[] = {"start chrome.exe "};
+    char comando[19] = {"start chrome.exe "};
     #endif // _WIN32
 
     #ifdef linux
-    char comando[] = {"firefox "};
+    char comando[9] = {"firefox "};
     #endif // linux
 
-    printf ("Digite o nome de uma obra: \n");
-    scanf("%s", &obra[0]);
+    //I'm Felling Lucky URL:
+    //"https://www.google.com/search?q=term&btnI"
 
-    strcat(google, obra);
-    strcat(google, "\&btnI");
+    switch (acaoPesquisar)
+    {
+    case 1:
+        strcpy(google, "\"https://www.google.com/search?q=myanimelist-");
+        strcpy(opcao, "Anime");
+        break;
+    case 2:
+        strcpy(google, "\"https://www.google.com/search?q=imdb-");
+        strcpy(opcao, "Série/Filme");
+        break;
+    case 3:
+        strcpy(google, "\"https://www.google.com/search?q=");
+        strcpy(opcao, "Outros");
+        break;
+    default:
+        return;
+    }
+
+    limparTela();
+    printf ("---------------------Pesquisar %s------------------------\n", opcao);
+    printf ("Digite o nome de uma obra: ");
+    getchar();
+    fgets (titulo, 50, stdin);
+    printf ("---------------------Pesquisar %s------------------------\n", opcao);
+
+    for (int i = 0; i < 50; i++)
+    {
+        if (titulo[i] == 32)
+        {
+            titulo[i] = 45;
+        }
+    }
+
+    strcat(google, titulo);
+    strcat(google, "&btnI\"");
     strcat(comando, google);
-    printf("%s", comando);
+
+    printf ("Você será redirecionado para uma página\n");
+    sleep (1);
 
     system (comando);
 }

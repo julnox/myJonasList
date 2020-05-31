@@ -37,10 +37,10 @@
 		<Unit filename="menus.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="myJonasList.c">
+		<Unit filename="myjonaslist.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="myJonasList.h" />
+		<Unit filename="myjonaslist.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
