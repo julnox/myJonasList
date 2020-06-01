@@ -236,10 +236,6 @@ void adicionarObra ()
     fprintf (arquivo, "Título: %s;Sinopse: %s;Data de Lançamento: %s;Categoria: %s\n", show.titulo, show.sinopse, show.dataDeLancamento, show.categoria);
     fclose(arquivo);
 
-    arquivo = fopen ("./arquivos/todasAsObras.txt", "a");
-    fprintf (arquivo, "Título: %s;Sinopse: %s;Data de Lançamento: %s;Categoria: %s\n", show.titulo, show.sinopse, show.dataDeLancamento, show.categoria);
-    fclose(arquivo);
-
     printf ("Obra Adicionada com Sucesso!\n");
     sleep (1);
 }
