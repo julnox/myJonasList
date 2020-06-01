@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <regex.h>
 #include "myjonaslist.h"
 
 typedef struct TV
@@ -58,7 +57,7 @@ void checarLocal ()
 void listarObras (int acaoListar)
 {
     char localDoArquivo [35];
-    char lista [1000];
+    char ch;
     char opcao [27];
 
     switch (acaoListar)
@@ -89,11 +88,18 @@ void listarObras (int acaoListar)
 
     arquivo = fopen (localDoArquivo, "r");
 
+    ch = getc(arquivo);
     limparTela();
     printf ("---------------------Lista de %s------------------------\n", opcao);
-    while (fgets(lista, 1000, arquivo) != NULL)
+    while (ch != EOF)
     {
-        printf("%s",lista);
+        if (ch == ';')
+        {
+            ch = ' ';
+            printf ("\b\n");
+        }
+        printf("%c", ch);
+        ch = getc(arquivo);
     }
     printf ("---------------------Lista de %s------------------------\n", opcao);
     fclose(arquivo);
@@ -105,14 +111,21 @@ void listarObras (int acaoListar)
 
 void listarTodasAsObras ()
 {
-    char lista [3000];
+    char ch;
     arquivo = fopen ("./arquivos/todasAsObras.txt", "r");
 
+    ch = getc(arquivo);
     limparTela();
     printf ("---------------------Lista de Todas As Obras------------------------\n");
-    while (fgets(lista, 1000, arquivo) != NULL)
+    while (ch != EOF)
     {
-        printf("%s",lista);
+        if (ch == ';')
+        {
+            ch = ' ';
+            printf ("\b\n");
+        }
+        printf("%c", ch);
+        ch = getc(arquivo);
     }
     printf ("---------------------Lista de Todas As Obras------------------------\n");
 
@@ -169,12 +182,44 @@ void adicionarObra ()
     show.dataDeLancamento[strcspn(show.dataDeLancamento, "\n")] = '\0';
     show.categoria[strcspn(show.categoria, "\n")] = '\0';
 
+    for (int i = 0; i < 50; i++)
+    {
+        if (show.titulo[i] == ';')
+        {
+            show.titulo[i] = ' ';
+        }
+    }
+
+    for (int i = 0; i < 150; i++)
+    {
+        if (show.sinopse[i] == ';')
+        {
+            show.sinopse[i] = ' ';
+        }
+    }
+
+    for (int i = 0; i < 12; i++)
+    {
+        if (show.dataDeLancamento[i] == ';')
+        {
+            show.dataDeLancamento[i] = ' ';
+        }
+    }
+
+    for (int i = 0; i < 15; i++)
+    {
+        if (show.categoria[i] == ';')
+        {
+            show.categoria[i] = ' ';
+        }
+    }
+
     arquivo = fopen (localDoArquivo, "a");
-    fprintf (arquivo, "\n Título: %s\n Sinopse: %s\n Data de Lançamento: %s\n Categoria: %s\n", show.titulo, show.sinopse, show.dataDeLancamento, show.categoria);
+    fprintf (arquivo, "Título: %s;Sinopse: %s;Data de Lançamento: %s;Categoria: %s\n", show.titulo, show.sinopse, show.dataDeLancamento, show.categoria);
     fclose(arquivo);
 
     arquivo = fopen ("./arquivos/todasAsObras.txt", "a");
-    fprintf (arquivo, "\n Título: %s\n Sinopse: %s\n Data de Lançamento: %s\n Categoria: %s\n", show.titulo, show.sinopse, show.dataDeLancamento, show.categoria);
+    fprintf (arquivo, "Título: %s;Sinopse: %s;Data de Lançamento: %s;Categoria: %s\n", show.titulo, show.sinopse, show.dataDeLancamento, show.categoria);
     fclose(arquivo);
 
     printf ("Obra Adicionada com Sucesso!\n");
@@ -184,13 +229,123 @@ void adicionarObra ()
 void removerObra ()
 {
     unsigned int acaoRemover;
+    char localDoArquivo [35];
+    char ch;
+    int linhaParaDeletar, temp = 1, cont = 1;
+    FILE *arquivoOriginal, *arquivoTemp, *arquivoTodos;
 
     acaoRemover = menuRemover();
 
     switch (acaoRemover)
     {
+    case 1:
+        strcpy(localDoArquivo, "./arquivos/obrasEmProgresso.txt");
+        break;
+    case 2:
+        strcpy(localDoArquivo, "./arquivos/obrasCompletadas.txt");
+        break;
+    case 3:
+        strcpy(localDoArquivo, "./arquivos/obrasPausadas.txt");
+        break;
+    case 4:
+        strcpy(localDoArquivo, "./arquivos/obrasAbandonadas.txt");
+        break;
+    case 5:
+        strcpy(localDoArquivo, "./arquivos/obrasPlanejamento.txt");
+        break;
+    default:
+        return;
+    }
+
+    arquivoOriginal = fopen(localDoArquivo, "r");
+
+    ch = getc(arquivoOriginal);
+    limparTela();
+
+    printf ("---------------------Arquivo Original------------------------\n");
+
+    if (ch != EOF)
+    {
+        printf ("1- ");
+    }
+
+    while (ch != EOF)
+    {
+        if (ch == '\n')
+        {
+            cont++;
+            printf ("\n%i- ", cont);
+        }
+
+        printf("%c", ch);
+        ch = getc(arquivoOriginal);
+    }
+    printf ("---------------------Arquivo Original------------------------\n");
+
+    rewind(arquivoOriginal);
+
+    do
+    {
+        printf("\nDigite a linha para ser deletada:");
+        scanf("%d", &linhaParaDeletar);
+    }
+    while (linhaParaDeletar < 1 || linhaParaDeletar > cont);
+
+    arquivoTemp = fopen("./arquivos/arquivoTemporario.txt", "w");
+    ch = getc(arquivoOriginal);
+
+    while (ch != EOF)
+    {
+        ch = getc(arquivoOriginal);
+        if (ch == '\n')
+        {
+            temp++;
+        }
+        if (temp != linhaParaDeletar)
+        {
+            putc(ch, arquivoTemp);
+        }
 
     }
+    remove(localDoArquivo);
+    rename("./arquivos/arquivoTemporario.txt", localDoArquivo);
+
+    fclose(arquivoOriginal);
+    fclose(arquivoTemp);
+
+    arquivoTodos = fopen ("./arquivos/todasAsObras.txt", "r");
+    arquivoTemp = fopen("./arquivos/arquivoTemporario.txt", "w");
+
+    ch = getc(arquivoTodos);
+    temp = 1;
+
+    while (ch != EOF)
+    {
+        ch = getc(arquivoTodos);
+        if (ch == '\n')
+        {
+            temp++;
+        }
+        if (temp != linhaParaDeletar)
+        {
+            putc(ch, arquivoTemp);
+        }
+
+    }
+    remove("./arquivos/todasAsObras.txt");
+    rename("./arquivos/arquivoTemporario.txt", "./arquivos/todasAsObras.txt");
+
+    printf("\n The contents of file after being modified are as follows:\n");
+
+    arquivoOriginal = fopen(localDoArquivo, "r");
+    ch = getc(arquivoOriginal);
+
+    while (ch != EOF)
+    {
+        printf("%c", ch);
+        ch = getc(arquivoOriginal);
+    }
+    fclose(arquivoOriginal);
 }
 
 void pesquisarObra ()

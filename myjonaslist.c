@@ -2,7 +2,7 @@
 #include <locale.h>
 #include "myjonaslist.h"
 
-int main()
+int main(void)
 {
     unsigned int acaoPrincipal;
 

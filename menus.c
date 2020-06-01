@@ -82,12 +82,12 @@ unsigned int menuRemover ()
     {
         limparTela();
         printf ("--------------------------------Remover----------------------------------\n");
-        printf ("| Digite (1) para remover item da lista de obras em progresso             |\n");
-        printf ("| Digite (2) para remover item da lista de obras completadas              |\n");
-        printf ("| Digite (3) para remover item da lista de obras pausadas                 |\n");
-        printf ("| Digite (4) para remover item da lista de obras abandonadas              |\n");
-        printf ("| Digite (5) para remover item da lista de obras em planejamento          |\n");
-        printf ("| Digite (6) para voltar                                                  |\n");
+        printf ("| Digite (1) para remover item da lista de obras em progresso            |\n");
+        printf ("| Digite (2) para remover item da lista de obras completadas             |\n");
+        printf ("| Digite (3) para remover item da lista de obras pausadas                |\n");
+        printf ("| Digite (4) para remover item da lista de obras abandonadas             |\n");
+        printf ("| Digite (5) para remover item da lista de obras em planejamento         |\n");
+        printf ("| Digite (6) para voltar                                                 |\n");
         printf ("--------------------------------Remover----------------------------------\n");
         printf ("Digite o número correspondente à ação: ");
         scanf ("%i", &acaoRemover);
