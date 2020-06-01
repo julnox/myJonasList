@@ -95,9 +95,15 @@ void listarObras (int acaoListar)
     {
         if (ch == ';')
         {
-            ch = ' ';
-            printf ("\b\n");
+            ch = '\b';
+            printf ("\n");
         }
+
+        else if (ch == '\n')
+        {
+            printf ("\n");
+        }
+
         printf("%c", ch);
         ch = getc(arquivo);
     }
@@ -121,9 +127,15 @@ void listarTodasAsObras ()
     {
         if (ch == ';')
         {
-            ch = ' ';
-            printf ("\b\n");
+            ch = '\b';
+            printf ("\n");
         }
+
+        else if (ch == '\n')
+        {
+            printf ("\n");
+        }
+
         printf("%c", ch);
         ch = getc(arquivo);
     }
@@ -230,6 +242,8 @@ void removerObra ()
 {
     unsigned int acaoRemover;
     char localDoArquivo [35];
+    char localArqTemp [34] = {"./arquivos/arquivoTemporario.txt"};
+    char localArqTodos [31] = {"./arquivos/todasAsObras.txt"};
     char ch;
     int linhaParaDeletar, temp = 1, cont = 1;
     FILE *arquivoOriginal, *arquivoTemp, *arquivoTodos;
@@ -273,14 +287,20 @@ void removerObra ()
     {
         if (ch == '\n')
         {
-            cont++;
-            printf ("\n%i- ", cont);
+            printf ("\n");
+            ch = getc(arquivoOriginal);
+            if (ch == 'T')
+            {
+                cont++;
+                printf ("%i- %c", cont, ch);
+                ch = getc(arquivoOriginal);
+            }
         }
 
         printf("%c", ch);
         ch = getc(arquivoOriginal);
     }
-    printf ("---------------------Arquivo Original------------------------\n");
+    printf ("\n---------------------Arquivo Original------------------------\n");
 
     rewind(arquivoOriginal);
 
@@ -291,14 +311,17 @@ void removerObra ()
     }
     while (linhaParaDeletar < 1 || linhaParaDeletar > cont);
 
-    arquivoTemp = fopen("./arquivos/arquivoTemporario.txt", "w");
+    arquivoTemp = fopen(localArqTemp, "w");
+
     ch = getc(arquivoOriginal);
+    putc(ch, arquivoTemp);
 
     while (ch != EOF)
     {
         ch = getc(arquivoOriginal);
-        if (ch == '\n')
+        if (ch == '\n' && temp!= linhaParaDeletar)
         {
+            putc(ch, arquivoTemp);
             temp++;
         }
         if (temp != linhaParaDeletar)
@@ -308,22 +331,25 @@ void removerObra ()
 
     }
     remove(localDoArquivo);
-    rename("./arquivos/arquivoTemporario.txt", localDoArquivo);
+    rename(localArqTemp, localDoArquivo);
 
     fclose(arquivoOriginal);
     fclose(arquivoTemp);
 
-    arquivoTodos = fopen ("./arquivos/todasAsObras.txt", "r");
-    arquivoTemp = fopen("./arquivos/arquivoTemporario.txt", "w");
+    arquivoTodos = fopen (localArqTodos, "r");
+    arquivoTemp = fopen(localArqTemp, "w");
+
+    temp = 1;
 
     ch = getc(arquivoTodos);
-    temp = 1;
+    putc(ch, arquivoTemp);
 
     while (ch != EOF)
     {
         ch = getc(arquivoTodos);
-        if (ch == '\n')
+        if (ch == '\n' && temp != linhaParaDeletar)
         {
+            putc(ch, arquivoTemp);
             temp++;
         }
         if (temp != linhaParaDeletar)
@@ -332,20 +358,11 @@ void removerObra ()
         }
 
     }
-    remove("./arquivos/todasAsObras.txt");
-    rename("./arquivos/arquivoTemporario.txt", "./arquivos/todasAsObras.txt");
+    remove(localArqTodos);
+    rename(localArqTemp, localArqTodos);
 
-    printf("\n The contents of file after being modified are as follows:\n");
-
-    arquivoOriginal = fopen(localDoArquivo, "r");
-    ch = getc(arquivoOriginal);
-
-    while (ch != EOF)
-    {
-        printf("%c", ch);
-        ch = getc(arquivoOriginal);
-    }
-    fclose(arquivoOriginal);
+    fclose(arquivoTodos);
+    fclose(arquivoTemp);
 }
 
 void pesquisarObra ()
