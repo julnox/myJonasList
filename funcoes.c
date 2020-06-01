@@ -7,9 +7,9 @@
 typedef struct TV
 {
     char titulo [50];
-    char sinopse [150];
+    char sinopse [1200];
     char dataDeLancamento [12];
-    char categoria [15];
+    char categoria [150];
 } TV;
 
 FILE *arquivo;
@@ -29,17 +29,16 @@ void limparTela ()
 
 void checarLocal ()
 {
-    char localDoArquivo [6][40] =
+    char localDoArquivo [5][35] =
     {
         "./arquivos/obrasEmProgresso.txt",
         "./arquivos/obrasCompletadas.txt",
         "./arquivos/obrasPausadas.txt",
         "./arquivos/obrasAbandonadas.txt",
         "./arquivos/obrasPlanejamento.txt",
-        "./arquivos/todasAsObras.txt"
     };
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 5; i++)
     {
         arquivo = fopen (localDoArquivo[i], "r");
         if (arquivo == NULL)
@@ -117,34 +116,41 @@ void listarObras (int acaoListar)
 
 void listarTodasAsObras ()
 {
-    char ch;
-    arquivo = fopen ("./arquivos/todasAsObras.txt", "r");
-
-    ch = getc(arquivo);
-    limparTela();
-    printf ("---------------------Lista de Todas As Obras------------------------\n");
-    while (ch != EOF)
+    char localDoArquivo [5][35] =
     {
-        if (ch == ';')
-        {
-            ch = '\b';
-            printf ("\n");
-        }
-
-        else if (ch == '\n')
-        {
-            printf ("\n");
-        }
-
-        printf("%c", ch);
+        "./arquivos/obrasEmProgresso.txt",
+        "./arquivos/obrasCompletadas.txt",
+        "./arquivos/obrasPausadas.txt",
+        "./arquivos/obrasAbandonadas.txt",
+        "./arquivos/obrasPlanejamento.txt",
+    };
+    char ch;
+    limparTela();
+    printf ("-------------------------Lista de Todas as Obras-------------------------\n");
+    for (int i = 0; i < 5; i++)
+    {
+        arquivo = fopen(localDoArquivo[i], "r");
         ch = getc(arquivo);
+
+        while (ch != EOF)
+        {
+            if (ch == ';')
+            {
+                ch = '\b';
+                printf ("\n");
+            }
+            else if (ch == '\n')
+            {
+                printf ("\n");
+            }
+            printf("%c", ch);
+            ch = getc(arquivo);
+        }
+        fclose(arquivo);
     }
-    printf ("---------------------Lista de Todas As Obras------------------------\n");
-
-    fclose(arquivo);
+    printf ("-------------------------Lista de Todas as Obras-------------------------\n");
     getchar();
     getchar();
-
 }
 
 void adicionarObra ()
@@ -176,25 +182,25 @@ void adicionarObra ()
         return;
     }
 
-    printf ("Digite o título: ");
+    printf ("Digite o título (50 caracteres): ");
     getchar();
     fgets (show.titulo, 50, stdin);
 
-    printf ("Digite a sinopse: ");
-    fgets (show.sinopse, 150, stdin);
+    printf ("Digite a sinopse (1200 caracteres): ");
+    fgets (show.sinopse, 1200, stdin);
 
-    printf ("Digite a data de lançamento: ");
+    printf ("Digite a data de lançamento (12 caracteres): ");
     fgets (show.dataDeLancamento, 12, stdin);
 
-    printf ("Digite a categoria: ");
-    fgets (show.categoria, 15, stdin);
+    printf ("Digite as categorias separadas por vírgula (150 caracteres): ");
+    fgets (show.categoria, 150, stdin);
 
     show.titulo[strcspn(show.titulo, "\n")] = '\0';
     show.sinopse[strcspn(show.sinopse, "\n")] = '\0';
     show.dataDeLancamento[strcspn(show.dataDeLancamento, "\n")] = '\0';
     show.categoria[strcspn(show.categoria, "\n")] = '\0';
 
-    for (int i = 0; i < 50; i++)
+    for (int i = 0; show.titulo[i] != '\0'; i++)
     {
         if (show.titulo[i] == ';')
         {
@@ -202,7 +208,7 @@ void adicionarObra ()
         }
     }
 
-    for (int i = 0; i < 150; i++)
+    for (int i = 0; show.sinopse[i] != '\0'; i++)
     {
         if (show.sinopse[i] == ';')
         {
@@ -210,7 +216,7 @@ void adicionarObra ()
         }
     }
 
-    for (int i = 0; i < 12; i++)
+    for (int i = 0; show.dataDeLancamento[i] != '\0'; i++)
     {
         if (show.dataDeLancamento[i] == ';')
         {
@@ -218,7 +224,7 @@ void adicionarObra ()
         }
     }
 
-    for (int i = 0; i < 15; i++)
+    for (int i = 0; show.categoria[i] != '\0'; i++)
     {
         if (show.categoria[i] == ';')
         {
@@ -243,10 +249,9 @@ void removerObra ()
     unsigned int acaoRemover;
     char localDoArquivo [35];
     char localArqTemp [34] = {"./arquivos/arquivoTemporario.txt"};
-    char localArqTodos [31] = {"./arquivos/todasAsObras.txt"};
     char ch;
     int linhaParaDeletar, temp = 1, cont = 1;
-    FILE *arquivoOriginal, *arquivoTemp, *arquivoTodos;
+    FILE *arquivoOriginal, *arquivoTemp;
 
     acaoRemover = menuRemover();
 
@@ -276,37 +281,44 @@ void removerObra ()
     ch = getc(arquivoOriginal);
     limparTela();
 
-    printf ("---------------------Arquivo Original------------------------\n");
+    printf ("--------------------------Remover-------------------------------\n");
 
     if (ch != EOF)
     {
-        printf ("1- ");
+        printf ("1:\n ");
     }
 
     while (ch != EOF)
     {
         if (ch == '\n')
         {
-            printf ("\n");
+            printf ("\n\n");
             ch = getc(arquivoOriginal);
             if (ch == 'T')
             {
                 cont++;
-                printf ("%i- %c", cont, ch);
+                printf ("%i:\n%c", cont, ch);
                 ch = getc(arquivoOriginal);
             }
         }
-
-        printf("%c", ch);
-        ch = getc(arquivoOriginal);
+        else if (ch == ';')
+        {
+            ch = '\b';
+            printf("\n");
+        }
+        else if (ch != EOF)
+        {
+            printf("%c", ch);
+            ch = getc(arquivoOriginal);
+        }
     }
-    printf ("\n---------------------Arquivo Original------------------------\n");
+    printf ("\n--------------------------Remover-------------------------------\n");
 
     rewind(arquivoOriginal);
 
     do
     {
-        printf("\nDigite a linha para ser deletada:");
+        printf("\nDigite o número da obra que deseja deletar:");
         scanf("%d", &linhaParaDeletar);
     }
     while (linhaParaDeletar < 1 || linhaParaDeletar > cont);
@@ -314,54 +326,24 @@ void removerObra ()
     arquivoTemp = fopen(localArqTemp, "w");
 
     ch = getc(arquivoOriginal);
-    putc(ch, arquivoTemp);
 
     while (ch != EOF)
     {
-        ch = getc(arquivoOriginal);
-        if (ch == '\n' && temp!= linhaParaDeletar)
+        if (ch == '\n')
         {
             putc(ch, arquivoTemp);
             temp++;
         }
-        if (temp != linhaParaDeletar)
+        else if (temp != linhaParaDeletar && ch != EOF)
         {
             putc(ch, arquivoTemp);
         }
-
+        ch = getc(arquivoOriginal);
     }
     remove(localDoArquivo);
     rename(localArqTemp, localDoArquivo);
 
     fclose(arquivoOriginal);
-    fclose(arquivoTemp);
-
-    arquivoTodos = fopen (localArqTodos, "r");
-    arquivoTemp = fopen(localArqTemp, "w");
-
-    temp = 1;
-
-    ch = getc(arquivoTodos);
-    putc(ch, arquivoTemp);
-
-    while (ch != EOF)
-    {
-        ch = getc(arquivoTodos);
-        if (ch == '\n' && temp != linhaParaDeletar)
-        {
-            putc(ch, arquivoTemp);
-            temp++;
-        }
-        if (temp != linhaParaDeletar)
-        {
-            putc(ch, arquivoTemp);
-        }
-
-    }
-    remove(localArqTodos);
-    rename(localArqTemp, localArqTodos);
-
-    fclose(arquivoTodos);
     fclose(arquivoTemp);
 }
 
@@ -412,9 +394,9 @@ void pesquisarObra ()
 
     for (int i = 0; i < 50; i++)
     {
-        if (titulo[i] == 32)
+        if (titulo[i] == ' ')
         {
-            titulo[i] = 45;
+            titulo[i] = '-';
         }
     }
 
@@ -422,8 +404,11 @@ void pesquisarObra ()
     strcat(google, "&btnI\"");
     strcat(comando, google);
 
+    printf ("Comando : %s\n", comando);
+
     printf ("Você será redirecionado para uma página\n");
     sleep (1);
 
     system (comando);
+    return;
 }
