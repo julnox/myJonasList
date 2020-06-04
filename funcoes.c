@@ -204,7 +204,7 @@ void adicionarObra ()
     {
         if (show.titulo[i] == ';')
         {
-            show.titulo[i] = ' ';
+            show.titulo[i] = '\0';
         }
     }
 
@@ -212,7 +212,7 @@ void adicionarObra ()
     {
         if (show.sinopse[i] == ';')
         {
-            show.sinopse[i] = ' ';
+            show.sinopse[i] = '\0';
         }
     }
 
@@ -220,7 +220,7 @@ void adicionarObra ()
     {
         if (show.dataDeLancamento[i] == ';')
         {
-            show.dataDeLancamento[i] = ' ';
+            show.dataDeLancamento[i] = '\0';
         }
     }
 
@@ -228,7 +228,7 @@ void adicionarObra ()
     {
         if (show.categoria[i] == ';')
         {
-            show.categoria[i] = ' ';
+            show.categoria[i] = '\0';
         }
     }
 
@@ -357,7 +357,7 @@ void pesquisarObra ()
     #endif // _WIN32
 
     #ifdef linux
-    char comando[9] = {"firefox "};
+    char comando[15] = {"google-chrome "};
     #endif // linux
 
     //I'm Felling Lucky URL:
@@ -388,7 +388,7 @@ void pesquisarObra ()
     fgets (titulo, 50, stdin);
     printf ("---------------------Pesquisar %s------------------------\n", opcao);
 
-    for (int i = 0; i < 50; i++)
+    for (int i = 0; titulo[i] != '\0'; i++)
     {
         if (titulo[i] == ' ')
         {
@@ -406,5 +406,4 @@ void pesquisarObra ()
     sleep (1);
 
     system (comando);
-    return;
 }
