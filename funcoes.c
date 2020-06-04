@@ -56,7 +56,7 @@ void checarLocal ()
 void listarObras (int acaoListar)
 {
     char localDoArquivo [35];
-    char ch;
+    char caracter;
     char opcao [27];
 
     switch (acaoListar)
@@ -87,24 +87,24 @@ void listarObras (int acaoListar)
 
     arquivo = fopen (localDoArquivo, "r");
 
-    ch = getc(arquivo);
+    caracter = getc(arquivo);
     limparTela();
     printf ("---------------------Lista de %s------------------------\n", opcao);
-    while (ch != EOF)
+    while (caracter != EOF)
     {
-        if (ch == ';')
+        if (caracter == ';')
         {
-            ch = '\b';
+            caracter = '\b';
             printf ("\n");
         }
 
-        else if (ch == '\n')
+        else if (caracter == '\n')
         {
             printf ("\n");
         }
 
-        printf("%c", ch);
-        ch = getc(arquivo);
+        printf ("%c", caracter);
+        caracter = getc(arquivo);
     }
     printf ("---------------------Lista de %s------------------------\n", opcao);
     fclose(arquivo);
@@ -124,27 +124,27 @@ void listarTodasAsObras ()
         "./arquivos/obrasAbandonadas.txt",
         "./arquivos/obrasPlanejamento.txt",
     };
-    char ch;
+    char caracter;
     limparTela();
     printf ("-------------------------Lista de Todas as Obras-------------------------\n");
     for (int i = 0; i < 5; i++)
     {
         arquivo = fopen(localDoArquivo[i], "r");
-        ch = getc(arquivo);
+        caracter = getc(arquivo);
 
-        while (ch != EOF)
+        while (caracter != EOF)
         {
-            if (ch == ';')
+            if (caracter == ';')
             {
-                ch = '\b';
+                caracter = '\b';
                 printf ("\n");
             }
-            else if (ch == '\n')
+            else if (caracter == '\n')
             {
                 printf ("\n");
             }
-            printf("%c", ch);
-            ch = getc(arquivo);
+            printf("%c", caracter);
+            caracter = getc(arquivo);
         }
         fclose(arquivo);
     }
@@ -204,7 +204,7 @@ void adicionarObra ()
     {
         if (show.titulo[i] == ';')
         {
-            show.titulo[i] = '\0';
+            show.titulo[i] = ' ';
         }
     }
 
@@ -212,7 +212,7 @@ void adicionarObra ()
     {
         if (show.sinopse[i] == ';')
         {
-            show.sinopse[i] = '\0';
+            show.sinopse[i] = ' ';
         }
     }
 
@@ -220,7 +220,7 @@ void adicionarObra ()
     {
         if (show.dataDeLancamento[i] == ';')
         {
-            show.dataDeLancamento[i] = '\0';
+            show.dataDeLancamento[i] = ' ';
         }
     }
 
@@ -228,7 +228,7 @@ void adicionarObra ()
     {
         if (show.categoria[i] == ';')
         {
-            show.categoria[i] = '\0';
+            show.categoria[i] = ' ';
         }
     }
 
@@ -245,8 +245,8 @@ void removerObra ()
     unsigned int acaoRemover;
     char localDoArquivo [35];
     char localArqTemp [34] = {"./arquivos/arquivoTemporario.txt"};
-    char ch;
-    int linhaParaDeletar, temp = 1, cont = 1;
+    char caracter;
+    int linhaParaDeletar, cont = 1, cont2 = 1;
     FILE *arquivoOriginal, *arquivoTemp;
 
     acaoRemover = menuRemover();
@@ -274,38 +274,38 @@ void removerObra ()
 
     arquivoOriginal = fopen(localDoArquivo, "r");
 
-    ch = getc(arquivoOriginal);
+    caracter = getc(arquivoOriginal);
     limparTela();
 
     printf ("--------------------------Remover-------------------------------\n");
 
-    if (ch != EOF)
+    if (caracter != EOF)
     {
         printf ("1:\n ");
     }
 
-    while (ch != EOF)
+    while (caracter != EOF)
     {
-        if (ch == '\n')
+        if (caracter == '\n')
         {
             printf ("\n\n");
-            ch = getc(arquivoOriginal);
-            if (ch == 'T')
+            caracter = getc(arquivoOriginal);
+            if (caracter == 'T')
             {
-                cont++;
-                printf ("%i:\n%c", cont, ch);
-                ch = getc(arquivoOriginal);
+                cont2++;
+                printf ("%i:\n%c", cont2, caracter);
+                caracter = getc(arquivoOriginal);
             }
         }
-        else if (ch == ';')
+        else if (caracter == ';')
         {
-            ch = '\b';
+            caracter = '\b';
             printf("\n");
         }
-        else if (ch != EOF)
+        else if (caracter != EOF)
         {
-            printf("%c", ch);
-            ch = getc(arquivoOriginal);
+            printf("%c", caracter);
+            caracter = getc(arquivoOriginal);
         }
     }
     printf ("\n--------------------------Remover-------------------------------\n");
@@ -314,27 +314,30 @@ void removerObra ()
 
     do
     {
-        printf("\nDigite o número da obra que deseja deletar:");
+        printf("\nDigite o número da obra que deseja deletar: ");
         scanf("%d", &linhaParaDeletar);
     }
-    while (linhaParaDeletar < 1 || linhaParaDeletar > cont);
+    while (linhaParaDeletar < 1 || linhaParaDeletar > cont2);
 
     arquivoTemp = fopen(localArqTemp, "w");
 
-    ch = getc(arquivoOriginal);
+    caracter = getc(arquivoOriginal);
 
-    while (ch != EOF)
+    while (caracter != EOF)
     {
-        if (ch == '\n')
+        if (caracter == '\n')
         {
-            putc(ch, arquivoTemp);
-            temp++;
+            cont++;
+            if (cont != linhaParaDeletar)
+            {
+                putc(caracter, arquivoTemp);
+            }
         }
-        else if (temp != linhaParaDeletar && ch != EOF)
+        else if (cont != linhaParaDeletar && caracter != EOF)
         {
-            putc(ch, arquivoTemp);
+            putc(caracter, arquivoTemp);
         }
-        ch = getc(arquivoOriginal);
+        caracter = getc(arquivoOriginal);
     }
     remove(localDoArquivo);
     rename(localArqTemp, localDoArquivo);
@@ -387,6 +390,8 @@ void pesquisarObra ()
     getchar();
     fgets (titulo, 50, stdin);
     printf ("---------------------Pesquisar %s------------------------\n", opcao);
+
+    titulo[strcspn(titulo, "\n")] = '\0';
 
     for (int i = 0; titulo[i] != '\0'; i++)
     {
