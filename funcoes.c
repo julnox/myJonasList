@@ -307,6 +307,7 @@ void removerObra (unsigned int acaoRemover)
         }
         caracter = getc(arquivoOriginal);
     }
+
     remove(localDoArquivo);
     rename(localArqTemp, localDoArquivo);
 
