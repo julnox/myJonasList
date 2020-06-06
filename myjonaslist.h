@@ -8,10 +8,10 @@ unsigned int menuRemover();
 unsigned int menuPesquisar ();
 void limparTela();
 void checarLocal();
-void listarObras (int operacao);
+void listarObras (unsigned int acaoListar);
 void listarTodasAsObras ();
-void adicionarObra ();
-void removerObra();
-void pesquisarObra();
+void adicionarObra (unsigned int acaoAdicionar);
+void removerObra(unsigned int acaoRemover);
+void pesquisarObra(unsigned int acaoPesquisar);
 
 #endif

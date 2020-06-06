@@ -12,6 +12,17 @@ typedef struct TV
     char categoria [150];
 } TV;
 
+char localDoArquivo [35];
+
+char localTodosArq [5][35] =
+{
+    "./arquivos/obrasEmProgresso.txt",
+    "./arquivos/obrasCompletadas.txt",
+    "./arquivos/obrasPausadas.txt",
+    "./arquivos/obrasAbandonadas.txt",
+    "./arquivos/obrasPlanejamento.txt",
+};
+
 FILE *arquivo;
 
 void limparTela ()
@@ -29,21 +40,12 @@ void limparTela ()
 
 void checarLocal ()
 {
-    char localDoArquivo [5][35] =
-    {
-        "./arquivos/obrasEmProgresso.txt",
-        "./arquivos/obrasCompletadas.txt",
-        "./arquivos/obrasPausadas.txt",
-        "./arquivos/obrasAbandonadas.txt",
-        "./arquivos/obrasPlanejamento.txt",
-    };
-
     for (int i = 0; i < 5; i++)
     {
-        arquivo = fopen (localDoArquivo[i], "r");
+        arquivo = fopen (localTodosArq[i], "r");
         if (arquivo == NULL)
         {
-            arquivo = fopen (localDoArquivo[i], "w");
+            arquivo = fopen (localTodosArq[i], "w");
             fclose(arquivo);
         }
         else
@@ -53,43 +55,45 @@ void checarLocal ()
     }
 }
 
-void listarObras (int acaoListar)
+void escolherLocalArq (unsigned int acao)
 {
-    char localDoArquivo [35];
-    char caracter;
-    char opcao [27];
-
-    switch (acaoListar)
+    switch (acao)
     {
     case 1:
         strcpy(localDoArquivo, "./arquivos/obrasEmProgresso.txt");
-        strcpy(opcao, "Obras em Progresso");
         break;
     case 2:
         strcpy(localDoArquivo, "./arquivos/obrasCompletadas.txt");
-        strcpy(opcao, "Obras Completadas");
         break;
     case 3:
         strcpy(localDoArquivo, "./arquivos/obrasPausadas.txt");
-        strcpy(opcao, "Obras Pausadas");
         break;
     case 4:
         strcpy(localDoArquivo, "./arquivos/obrasAbandonadas.txt");
-        strcpy(opcao, "Obras Abandonadas");
-        break;
-    case 5:
-        strcpy(localDoArquivo, "./arquivos/obrasPlanejamento.txt");
-        strcpy(opcao, "Obras Planeja-se Assistir");
         break;
     default:
+        strcpy(localDoArquivo, "./arquivos/obrasPlanejamento.txt");
+        break;
+    }
+}
+
+void listarObras (unsigned int acaoListar)
+{
+    if (acaoListar == 6)
+    {
         return;
     }
 
-    arquivo = fopen (localDoArquivo, "r");
+    char caracter;
 
+    escolherLocalArq(acaoListar);
+
+    arquivo = fopen (localDoArquivo, "r");
     caracter = getc(arquivo);
+
     limparTela();
-    printf ("---------------------Lista de %s------------------------\n", opcao);
+    printf ("----------------------------------Listar-------------------------------------\n");
+
     while (caracter != EOF)
     {
         if (caracter == ';')
@@ -106,7 +110,9 @@ void listarObras (int acaoListar)
         printf ("%c", caracter);
         caracter = getc(arquivo);
     }
-    printf ("---------------------Lista de %s------------------------\n", opcao);
+
+    printf ("----------------------------------Listar-------------------------------------\n");
+
     fclose(arquivo);
 
     getchar();
@@ -116,20 +122,14 @@ void listarObras (int acaoListar)
 
 void listarTodasAsObras ()
 {
-    char localDoArquivo [5][35] =
-    {
-        "./arquivos/obrasEmProgresso.txt",
-        "./arquivos/obrasCompletadas.txt",
-        "./arquivos/obrasPausadas.txt",
-        "./arquivos/obrasAbandonadas.txt",
-        "./arquivos/obrasPlanejamento.txt",
-    };
     char caracter;
+
     limparTela();
-    printf ("-------------------------Lista de Todas as Obras-------------------------\n");
+    printf ("---------------------------Lista de Todas as Obras---------------------------\n");
+
     for (int i = 0; i < 5; i++)
     {
-        arquivo = fopen(localDoArquivo[i], "r");
+        arquivo = fopen(localTodosArq[i], "r");
         caracter = getc(arquivo);
 
         while (caracter != EOF)
@@ -148,39 +148,23 @@ void listarTodasAsObras ()
         }
         fclose(arquivo);
     }
-    printf ("-------------------------Lista de Todas as Obras-------------------------\n");
+
+    printf ("---------------------------Lista de Todas as Obras---------------------------\n");
+
     getchar();
     getchar();
 }
 
-void adicionarObra ()
+void adicionarObra (unsigned int acaoAdicionar)
 {
-    unsigned int acaoAdicionar;
-    char localDoArquivo [35];
-    TV show;
-
-    acaoAdicionar = menuAdicionar();
-
-    switch (acaoAdicionar)
+    if (acaoAdicionar == 6)
     {
-    case 1:
-        strcpy(localDoArquivo, "./arquivos/obrasEmProgresso.txt");
-        break;
-    case 2:
-        strcpy(localDoArquivo, "./arquivos/obrasCompletadas.txt");
-        break;
-    case 3:
-        strcpy(localDoArquivo, "./arquivos/obrasPausadas.txt");
-        break;
-    case 4:
-        strcpy(localDoArquivo, "./arquivos/obrasAbandonadas.txt");
-        break;
-    case 5:
-        strcpy(localDoArquivo, "./arquivos/obrasPlanejamento.txt");
-        break;
-    default:
         return;
     }
+
+    TV show;
+
+    escolherLocalArq(acaoAdicionar);
 
     printf ("Digite o título (50 caracteres): ");
     getchar();
@@ -240,48 +224,31 @@ void adicionarObra ()
     sleep (1);
 }
 
-void removerObra ()
+void removerObra (unsigned int acaoRemover)
 {
-    unsigned int acaoRemover;
-    char localDoArquivo [35];
-    char localArqTemp [34] = {"./arquivos/arquivoTemporario.txt"};
-    char caracter;
-    int linhaParaDeletar, cont = 1, cont2 = 1;
-    FILE *arquivoOriginal, *arquivoTemp;
-
-    acaoRemover = menuRemover();
-
-    switch (acaoRemover)
+    if (acaoRemover == 6)
     {
-    case 1:
-        strcpy(localDoArquivo, "./arquivos/obrasEmProgresso.txt");
-        break;
-    case 2:
-        strcpy(localDoArquivo, "./arquivos/obrasCompletadas.txt");
-        break;
-    case 3:
-        strcpy(localDoArquivo, "./arquivos/obrasPausadas.txt");
-        break;
-    case 4:
-        strcpy(localDoArquivo, "./arquivos/obrasAbandonadas.txt");
-        break;
-    case 5:
-        strcpy(localDoArquivo, "./arquivos/obrasPlanejamento.txt");
-        break;
-    default:
         return;
     }
 
+    char localArqTemp [34] = {"./arquivos/arquivoTemporario.txt"};
+    char caracter;
+    int linhaParaDeletar, cont = 1, cont2 = 1;
+
+    FILE *arquivoOriginal, *arquivoTemp;
+
+    acaoRemover = menuRemover();
+    escolherLocalArq(acaoRemover);
+
     arquivoOriginal = fopen(localDoArquivo, "r");
-
     caracter = getc(arquivoOriginal);
-    limparTela();
 
-    printf ("--------------------------Remover-------------------------------\n");
+    limparTela();
+    printf ("---------------------------------Remover-------------------------------------\n");
 
     if (caracter != EOF)
     {
-        printf ("1:\n ");
+        printf ("1:\n");
     }
 
     while (caracter != EOF)
@@ -308,7 +275,8 @@ void removerObra ()
             caracter = getc(arquivoOriginal);
         }
     }
-    printf ("\n--------------------------Remover-------------------------------\n");
+
+    printf ("---------------------------------Remover-------------------------------------\n");
 
     rewind(arquivoOriginal);
 
@@ -346,14 +314,15 @@ void removerObra ()
     fclose(arquivoTemp);
 }
 
-void pesquisarObra ()
+void pesquisarObra (unsigned int acaoPesquisar)
 {
+    if (acaoPesquisar == 4)
+    {
+        return;
+    }
+
     char titulo [50];
     char google [80];
-    char opcao [15];
-    unsigned int acaoPesquisar;
-
-    acaoPesquisar = menuPesquisar();
 
     #ifdef _WIN32
     char comando[19] = {"start chrome.exe "};
@@ -370,26 +339,25 @@ void pesquisarObra ()
     {
     case 1:
         strcpy(google, "\"https://www.google.com/search?q=myanimelist-");
-        strcpy(opcao, "Anime");
         break;
     case 2:
         strcpy(google, "\"https://www.google.com/search?q=imdb-");
-        strcpy(opcao, "Série/Filme");
         break;
     case 3:
         strcpy(google, "\"https://www.google.com/search?q=");
-        strcpy(opcao, "Outros");
         break;
     default:
         return;
     }
 
     limparTela();
-    printf ("---------------------Pesquisar %s------------------------\n", opcao);
+    printf ("--------------------------------Pesquisar------------------------------------\n");
+
     printf ("Digite o nome de uma obra: ");
     getchar();
     fgets (titulo, 50, stdin);
-    printf ("---------------------Pesquisar %s------------------------\n", opcao);
+
+    printf ("--------------------------------Pesquisar------------------------------------\n");
 
     titulo[strcspn(titulo, "\n")] = '\0';
 
@@ -405,7 +373,7 @@ void pesquisarObra ()
     strcat(google, "&btnI\"");
     strcat(comando, google);
 
-    printf ("Comando : %s\n", comando);
+    //printf ("Comando : %s\n", comando);
 
     printf ("Você será redirecionado para uma página\n");
     sleep (1);

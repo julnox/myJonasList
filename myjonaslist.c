@@ -22,13 +22,13 @@ int main(void)
             listarTodasAsObras();
             break;
         case 3:
-            adicionarObra();
+            adicionarObra(menuAdicionar());
             break;
         case 4:
-            removerObra();
+            removerObra(menuRemover());
             break;
         case 5:
-            pesquisarObra();
+            pesquisarObra(menuPesquisar());
             break;
         default:
             exit(0);
