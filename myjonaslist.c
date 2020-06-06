@@ -31,7 +31,7 @@ int main(void)
             pesquisarObra(menuPesquisar());
             break;
         default:
-            exit(0);
+            return 0;
         }
     }
 }
