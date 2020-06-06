@@ -27,13 +27,13 @@ FILE *arquivo;
 
 void limparTela ()
 {
-    #ifdef _WIN32
+#ifdef _WIN32
     char comandoLimparTela [4] = "cls";
-    #endif // _WIN32
+#endif // _WIN32
 
-    #ifdef linux
+#ifdef linux
     char comandoLimparTela [6] = "clear";
-    #endif // linux
+#endif // linux
 
     system(comandoLimparTela);
 }
@@ -99,16 +99,12 @@ void listarObras (unsigned int acaoListar)
         if (caracter == ';')
         {
             caracter = '\b';
-            printf ("\n");
         }
-
-        else if (caracter == '\n')
+        else
         {
-            printf ("\n");
+            printf ("%c", caracter);
+            caracter = getc(arquivo);
         }
-
-        printf ("%c", caracter);
-        caracter = getc(arquivo);
     }
 
     printf ("----------------------------------Listar-------------------------------------\n");
@@ -137,14 +133,12 @@ void listarTodasAsObras ()
             if (caracter == ';')
             {
                 caracter = '\b';
-                printf ("\n");
             }
-            else if (caracter == '\n')
+            else
             {
-                printf ("\n");
+                printf ("%c", caracter);
+                caracter = getc(arquivo);
             }
-            printf("%c", caracter);
-            caracter = getc(arquivo);
         }
         fclose(arquivo);
     }
@@ -217,7 +211,7 @@ void adicionarObra (unsigned int acaoAdicionar)
     }
 
     arquivo = fopen (localDoArquivo, "a");
-    fprintf (arquivo, "Título: %s;Sinopse: %s;Data de Lançamento: %s;Categoria: %s\n", show.titulo, show.sinopse, show.dataDeLancamento, show.categoria);
+    fprintf (arquivo, "Título: %s;\nSinopse: %s;\nData de Lançamento: %s;\nCategoria: %s;\n\n", show.titulo, show.sinopse, show.dataDeLancamento, show.categoria);
     fclose(arquivo);
 
     printf ("Obra Adicionada com Sucesso!\n");
@@ -233,11 +227,10 @@ void removerObra (unsigned int acaoRemover)
 
     char localArqTemp [34] = {"./arquivos/arquivoTemporario.txt"};
     char caracter;
-    int linhaParaDeletar, cont = 1, cont2 = 1;
+    int obraParaDeletar, cont = 1, cont2 = 1, contPV = 0;
 
     FILE *arquivoOriginal, *arquivoTemp;
 
-    acaoRemover = menuRemover();
     escolherLocalArq(acaoRemover);
 
     arquivoOriginal = fopen(localDoArquivo, "r");
@@ -248,31 +241,36 @@ void removerObra (unsigned int acaoRemover)
 
     if (caracter != EOF)
     {
-        printf ("1:\n");
+        printf ("Obra número 1:\n");
     }
 
     while (caracter != EOF)
     {
-        if (caracter == '\n')
-        {
-            printf ("\n\n");
-            caracter = getc(arquivoOriginal);
-            if (caracter == 'T')
-            {
-                cont2++;
-                printf ("%i:\n%c", cont2, caracter);
-                caracter = getc(arquivoOriginal);
-            }
-        }
-        else if (caracter == ';')
+        if (caracter == ';')
         {
             caracter = '\b';
-            printf("\n");
+            contPV++;
         }
         else if (caracter != EOF)
         {
             printf("%c", caracter);
             caracter = getc(arquivoOriginal);
+        }
+        if (contPV == 4)
+        {
+            caracter = getc(arquivoOriginal);
+            caracter = getc(arquivoOriginal);
+            caracter = getc(arquivoOriginal);
+
+            if (caracter == 'T')
+            {
+                cont2++;
+                printf ("\n");
+                printf ("\nObra número %i:\n", cont2);
+                printf ("%c", caracter);
+                caracter = getc(arquivoOriginal);
+            }
+            contPV = 0;
         }
     }
 
@@ -283,27 +281,49 @@ void removerObra (unsigned int acaoRemover)
     do
     {
         printf("\nDigite o número da obra que deseja deletar: ");
-        scanf("%d", &linhaParaDeletar);
+        scanf("%d", &obraParaDeletar);
     }
-    while (linhaParaDeletar < 1 || linhaParaDeletar > cont2);
+    while (obraParaDeletar < 1 || obraParaDeletar > cont2);
 
     arquivoTemp = fopen(localArqTemp, "w");
-
     caracter = getc(arquivoOriginal);
+    contPV = 0;
 
     while (caracter != EOF)
     {
-        if (caracter == '\n')
+        if (caracter == ';')
         {
-            cont++;
-            if (cont != linhaParaDeletar)
+            if (cont != obraParaDeletar)
             {
                 putc(caracter, arquivoTemp);
             }
+            contPV++;
         }
-        else if (cont != linhaParaDeletar && caracter != EOF)
+        else if (cont != obraParaDeletar && caracter != EOF)
         {
             putc(caracter, arquivoTemp);
+        }
+        if (contPV == 4)
+        {
+            caracter = getc(arquivoOriginal);
+            caracter = getc(arquivoOriginal);
+            caracter = getc(arquivoOriginal);
+            if (caracter == 'T')
+            {
+                cont++;
+                if (cont != obraParaDeletar)
+                {
+                    putc ('\n', arquivoTemp);
+                    putc ('\n', arquivoTemp);
+                    putc(caracter, arquivoTemp);
+                }
+            }
+            else
+            {
+                putc ('\n', arquivoTemp);
+                putc ('\n', arquivoTemp);
+            }
+            contPV = 0;
         }
         caracter = getc(arquivoOriginal);
     }
@@ -325,13 +345,13 @@ void pesquisarObra (unsigned int acaoPesquisar)
     char titulo [50];
     char google [80];
 
-    #ifdef _WIN32
+#ifdef _WIN32
     char comando[19] = {"start chrome.exe "};
-    #endif // _WIN32
+#endif // _WIN32
 
-    #ifdef linux
+#ifdef linux
     char comando[15] = {"google-chrome "};
-    #endif // linux
+#endif // linux
 
     //I'm Felling Lucky URL:
     //"https://www.google.com/search?q=term&btnI"
