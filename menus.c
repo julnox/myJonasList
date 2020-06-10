@@ -1,12 +1,16 @@
+//Biblioteca padrão para entrada e saida.
 #include <stdio.h>
+//Biblioteca especifica do programa que importa funções incluidas no header.
 #include "myjonaslist.h"
 
+//Um modificador para tipos numericos inteiros não negativos.
 unsigned int menuPrincipal ()
 {
     unsigned int acaoPrincipal;
-
+    //Faz primeiro o que está dentro das chaves e depois faz o while.
     do
     {
+        //Menu
         limparTela();
         printf ("----------------------------------MyJonasList--------------------------------\n");
         printf ("| Digite (1) para listar obras                                              |\n");
@@ -20,8 +24,9 @@ unsigned int menuPrincipal ()
         scanf ("%i", &acaoPrincipal);
 
     }
+    //Essa e uma estrutura de repetição onde as intruções seram execultadas pelo menos uma vez enquanto a resposta for (V).
     while (acaoPrincipal < 1 || acaoPrincipal > 6);
-
+    //Retorna a função acaoPrincipal.
     return acaoPrincipal;
 }
 

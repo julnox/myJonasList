@@ -1,19 +1,25 @@
+//Biblioteca padrão para entrada e saida.
 #include <stdio.h>
+//Biblioteca que possui funções associadas a alocação de memoria, controle de processos e etc.
 #include <stdlib.h>
+//Biblioteca que possui funções para comparação, atribuição e uso de strings.
 #include <string.h>
+//Uso da biblioteca para dar uma pausa temporaria.
 #include <unistd.h>
+//Biblioteca especifica do programa que importa funções incluidas no header.
 #include "myjonaslist.h"
 
+//Comando usado para criar um tipo de variavel.
 typedef struct TV
 {
+    //O termo utilizado para identificar um sequencia de caracter.
     char titulo [50];
     char sinopse [1200];
     char dataDeLancamento [12];
     char categoria [150];
 } TV;
-
+//Atribuições que pode ser usada por todas as funções.
 char localDoArquivo [35];
-
 char localTodosArq [5][35] =
 {
     "./arquivos/obrasEmProgresso.txt",
@@ -22,19 +28,21 @@ char localTodosArq [5][35] =
     "./arquivos/obrasAbandonadas.txt",
     "./arquivos/obrasPlanejamento.txt",
 };
-
+//Comando usado para criação e manipulação de arquivos.
 FILE *arquivo;
-
+//Comando para limpar Tela(Linux)e(Windows).
 void limparTela ()
 {
+//Condição para o pre-processamento do programa.
 #ifdef _WIN32
     char comandoLimparTela [4] = "cls";
+//Fechamento da condição
 #endif // _WIN32
 
 #ifdef linux
     char comandoLimparTela [6] = "clear";
 #endif // linux
-
+    //Manda um comando para o terminal do sistema.
     system(comandoLimparTela);
 }
 
