@@ -1,3 +1,9 @@
+/*
+    Disponibiliza funções para todos os arquivos onde a bliblioteca é importada
+*/
+
+//Condição para o pré-compilador
+//para evitar que a biblioteca seja importada várias vezes
 #ifndef MYJONASLIST_H
 #define MYJONASLIST_H
 

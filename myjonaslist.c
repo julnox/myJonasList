@@ -1,3 +1,9 @@
+/*
+    MyJonasList:
+    Programa que lista características de obras audiovisuais,
+    armazena em arquivos txt
+*/
+
 //Biblioteca que possui funções associadas a alocação de memoria, controle de processos e etc.
 #include <stdlib.h>
 //Biblioteca que implementa a localização de programas e uso de acentuação de caracteres.
@@ -12,7 +18,7 @@ int main(void)
     //Função usada para adaptar o programa ao idioma que deseja.
     setlocale(LC_ALL, "Portuguese");
     //Verificar se os arquivos usados pelo programa já estão criados,
-    //caso não exita será criado.
+    //caso não exista será criado.
     checarLocal ();
     //Essa e uma estrutura de repetição onde as intruções seram execultadas pelo menos uma vez enquanto a resposta for (V).
     while (acaoPrincipal != 6)
