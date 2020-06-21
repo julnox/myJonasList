@@ -4,40 +4,40 @@
 
 //Biblioteca padrão para entrada e saida.
 #include <stdio.h>
-//Biblioteca que possui funções associadas a alocação de memoria, controle de processos e etc.
+//Biblioteca que possui funções associadas à alocação de memoria, controle de processos e etc.
 #include <stdlib.h>
 //Biblioteca que possui funções para comparação, atribuição e uso de strings.
 #include <string.h>
-//Uso da biblioteca para dar uma pausa temporaria.
+//Uso da biblioteca para dar uma pausa temporária.
 #include <unistd.h>
 //Biblioteca especifica do programa que importa funções incluidas no header.
 #include "myjonaslist.h"
 
-//Comando usado para criar um tipo de variavel.
+//Comando usado para criar um tipo de variável.
 typedef struct TV
 {
-    //O termo utilizado para identificar um sequencia de caracter.
+    //O termo utilizado para identificar um sequência de caractér.
     char titulo [50];
     char sinopse [1200];
     char dataDeLancamento [12];
     char categoria [150];
 } TV;
 
-//Atribuições que pode ser usada por todas as funções.
+//Inicializações que podem ser usadas por várias funções.
 char localDoArquivo [35];
 char localTodosArq [5][35] =
 {
-    "./arquivos/obrasEmProgresso.txt",
-    "./arquivos/obrasCompletadas.txt",
-    "./arquivos/obrasPausadas.txt",
-    "./arquivos/obrasAbandonadas.txt",
-    "./arquivos/obrasPlanejamento.txt",
+    "./arquivos/obrasEmProgresso.txt", // Posição 0
+    "./arquivos/obrasCompletadas.txt", // Posição 1
+    "./arquivos/obrasPausadas.txt", // Posição 2
+    "./arquivos/obrasAbandonadas.txt", // Posição 3
+    "./arquivos/obrasPlanejamento.txt", // Posição 4
 };
 
-//Comando usado para criação e manipulação de arquivos.
+//Ponteiro para FILE usado para criação e manipulação de arquivos.
 FILE *arquivo;
 
-//Comando para limpar Tela(Linux)e(Windows).
+//Função para limpar tela Linux e Windows.
 void limparTela ()
 {
     //Condição para o pre-processamento do programa,
@@ -55,19 +55,23 @@ void limparTela ()
     system(comandoLimparTela);
 }
 
-//Verificar se os arquivos já existem, se não,
-//será criado novos arquivos
+//Verificar se os arquivos já existem, se não, será criado novos arquivos
 void checarLocal ()
 {
-    //Laço de repetição que percorre todos os 5 arquivos
+    //Laço de repetição que percorre todos os 5 locais de arquivos usados no programa
     for (int i = 0; i < 5; i++)
     {
+        //Abre o arquivo no modo de apenas leitura
         arquivo = fopen (localTodosArq[i], "r");
+
+        //Condição para caso o local do arquivo não exista
         if (arquivo == NULL)
         {
+            //Abre o arquivo no modo de escrita, criando o arquivo
             arquivo = fopen (localTodosArq[i], "w");
             fclose(arquivo);
         }
+        //Condição para caso a anterior seja falsa
         else
         {
             fclose(arquivo);
@@ -354,7 +358,7 @@ void removerObra (unsigned int acaoRemover)
     //Rebobina a posição do caractere no arquivo
     rewind(arquivoOriginal);
 
-    //Input do usário com o número respectivo a obra que ele deseja deletar
+    //Input do usuário com o número respectivo a obra que ele deseja deletar
     do
     {
         printf("\nDigite o número da obra que deseja deletar: ");
@@ -387,7 +391,7 @@ void removerObra (unsigned int acaoRemover)
             }
             contPontoVirgula++;
         }
-        //Se a condição anterior for falsa e o cont2 não for igual a obraParaDeletar
+        //Se a condição anterior for falsa, o cont2 não for igual a obraParaDeletar
         //e não for igual a End of File (EOF), caracter será colocado no arquivo tempórario
         else if (cont2 != obraParaDeletar && caracter != EOF)
         {
@@ -463,14 +467,14 @@ void pesquisarObra (unsigned int acaoPesquisar)
     #endif // _WIN32
 
     #ifdef linux
-    char comando[15] = {"google-chrome "};
+    char comando[15] = {"firefox "};
     #endif // linux
 
     //URL Estou com sorte:
     //Substituir "term" por titulo da obra separado por hífen
     //"https://www.google.com/search?q=term&btnI"
 
-    //A URL mudará conforme o tipo que o usuário deseja pesquisar
+    //A URL mudará conforme o tipo de obra que o usuário deseja pesquisar
     switch (acaoPesquisar)
     {
     case 1:

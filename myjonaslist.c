@@ -4,8 +4,6 @@
     armazena em arquivos txt
 */
 
-//Biblioteca que possui funções associadas a alocação de memoria, controle de processos e etc.
-#include <stdlib.h>
 //Biblioteca que implementa a localização de programas e uso de acentuação de caracteres.
 #include <locale.h>
 //Biblioteca especifica do programa que importa funções incluidas no header.
