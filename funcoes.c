@@ -458,7 +458,7 @@ void pesquisarObra (unsigned int acaoPesquisar)
     }
 
     char titulo [50];
-    char google [80];
+    char google [110];
 
     //Condição para o pre-processamento do programa,
     //o comando será diferente caso o SO seja Windows ou Linux
