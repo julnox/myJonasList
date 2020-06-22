@@ -463,7 +463,7 @@ void pesquisarObra (unsigned int acaoPesquisar)
     //Condição para o pre-processamento do programa,
     //o comando será diferente caso o SO seja Windows ou Linux
     #ifdef _WIN32
-    char comando[7] = {"start "};
+    char comando[15] = {"start \"\" "};
     #endif // _WIN32
 
     #ifdef linux
