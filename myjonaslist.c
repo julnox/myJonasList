@@ -1,32 +1,32 @@
 /*
     MyJonasList:
-    Programa que lista caracterÌsticas de obras audiovisuais,
+    Programa que lista caracter√≠sticas de obras audiovisuais,
     armazena em arquivos txt
 */
 
-//Biblioteca que implementa a localizaÁ„o de programas e uso de acentuaÁ„o de caracteres.
+//Biblioteca que implementa a localiza√ß√£o de programas e uso de acentua√ß√£o de caracteres.
 #include <locale.h>
-//Biblioteca especifica do programa que importa funÁıes incluidas no header.
+//Biblioteca especifica do programa que importa fun√ß√µes incluidas no header.
 #include "myjonaslist.h"
 
 int main(void)
 {
-    //Um modificador para tipos numericos inteiros n„o negativos.
+    //Um modificador para tipos numericos inteiros n√£o negativos.
     unsigned int acaoPrincipal;
-    //FunÁ„o usada para adaptar o programa ao idioma que deseja.
+    //Fun√ß√£o usada para adaptar o programa ao idioma que deseja.
     setlocale(LC_ALL, "Portuguese");
-    //Verificar se os arquivos usados pelo programa j· est„o criados,
-    //caso n„o exista ser· criado.
+    //Verificar se os arquivos usados pelo programa j√° est√£o criados,
+    //caso n√£o exista ser√° criado.
     checarLocal ();
-    //Essa e uma estrutura de repetiÁ„o onde as intruÁıes seram execultadas pelo menos uma vez enquanto a resposta for (V).
+    //Essa e uma estrutura de repeti√ß√£o onde as intru√ß√µes seram execultadas pelo menos uma vez enquanto a resposta for (V).
     while (acaoPrincipal != 6)
     {
-        //Atribui o valor retornado da funÁ„o menur principal a variavel ac„oPrincipal.
+        //Atribui o valor retornado da fun√ß√£o menur principal a variavel ac√£oPrincipal.
         acaoPrincipal = menuPrincipal();
         //Comando usado para fazer uma estrutura de menu, normalmente usadas para substituir varios ifs e else.
         switch (acaoPrincipal)
         {
-        //Esses s„o os casos que acompanham o comando switch, os "blocos" que fazem parte do menu.
+        //Esses s√£o os casos que acompanham o comando switch, os "blocos" que fazem parte do menu.
         case 1:
             listarObras(menuListar());
             break;
@@ -41,7 +41,7 @@ int main(void)
             break;
         case 5:
             pesquisarObra(menuPesquisar());
-            //Comando padr„o usado no fim de cada case, onde e finalizado a execuÁ„o do switch.
+            //Comando padr√£o usado no fim de cada case, onde e finalizado a execu√ß√£o do switch.
             break;
             //Comando usado para quando nenhuma das alternativas anteriores seja verdadeira.
         default:
