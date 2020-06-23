@@ -143,6 +143,7 @@ void listarObras (unsigned int acaoListar)
 
     fclose(arquivo);
 
+    printf ("Pressione Enter para continuar. . .\n");
     getchar();
     getchar();
 
@@ -181,6 +182,7 @@ void listarTodasAsObras ()
 
     printf ("---------------------------Lista de Todas as Obras---------------------------\n");
 
+    printf ("Pressione Enter para continuar. . .\n");
     getchar();
     getchar();
 }
