@@ -14,7 +14,7 @@ int main(void)
     //Um modificador para tipos numericos inteiros não negativos.
     unsigned int acaoPrincipal;
     //Função usada para adaptar o programa ao idioma que deseja.
-    setlocale(LC_ALL, "Portuguese");
+    setlocale(LC_ALL, "Portuguese_Brazilian");
     //Verificar se os arquivos usados pelo programa já estão criados,
     //caso não exista será criado.
     checarLocal ();
